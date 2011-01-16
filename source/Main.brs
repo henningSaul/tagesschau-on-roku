@@ -1,18 +1,20 @@
 Sub Main()
     initTheme()
-	categories = getCategories()
-    showPosterScreen(categories)
+    showPosterScreen()
 End Sub
 
-Function showPosterScreen(categories As Object) As Integer
+Function showPosterScreen() As Integer
     port = CreateObject("roMessagePort")
     screen = CreateObject("roPosterScreen")
     screen.SetMessagePort(port)
-    screen.SetListStyle("arced-landscape")
+	screen.SetListStyle("arced-16x9")
+    'screen.SetListStyle("arced-landscape")	
+    screen.Show()
+	' TODO: show an overlay while retrieving content?
+	categories = getCategories()	
     categoryNames = getCategoryNames(categories)
     screen.SetListNames(categoryNames)
-    'screen.SetContentList(categories[0].items)
-    screen.Show()
+    screen.SetContentList(categories[0].items)
 
     while true
         msg = wait(0, screen.GetMessagePort())
@@ -23,7 +25,7 @@ Function showPosterScreen(categories As Object) As Integer
 					showImpressumScreen()
 					screen.setFocusedList(0)
 				else
-					'screen.SetContentList(categories[msg.GetIndex()].items)				
+					screen.SetContentList(categories[msg.GetIndex()].items)				
 				end if
 			else if msg.isListItemSelected() then
                 print "list item selected | current show = "; msg.GetIndex() 
