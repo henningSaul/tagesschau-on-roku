@@ -1,7 +1,8 @@
 Function getCategories() As Object
     categories = CreateObject("roList")
+	'category = getCategory("Test", "http://10.0.1.5/test.json")
+	'categories.AddTail(category)
 	category = getCategory("Dossier", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
-	'category = getCategory("Dossier", "http://10.0.1.5/test.json")
 	categories.AddTail(category)
 	return categories	
 End Function
@@ -36,37 +37,66 @@ Function getVideo(video As Object) As Object
     content = CreateObject("roAssociativeArray")
 	content.ContentType = "movie"
 	length = ((video.outMilli - video.inMilli) / 1000)
-	print length
 	content.Length = length
-    content.ReleaseDate = left(video.broadcastDate, 10)
+    content.ReleaseDate = getReleaseDate(video)
 	content.ShortDescriptionLine1 = video.headline
-	content.ShortDescriptionLine2 = content.ReleaseDate
-    content.StreamFormat= "mp4"
-	' get images
-	' Roku arced-landscape sizes: SD=214x144; HD=290x218
-	' Roku arced-16x9 sizes: SD=166x112; HD=224x168
+	content.ShortDescriptionLine2 = getDescriptionLine2(content, video)
+    content.StreamFormat = "mp4"
+	content.Streams = getStreams(video)
+	' get image, Roku arced-landscape sizes: SD=214x144; HD=290x218, Roku arced-16x9 sizes: SD=166x112; HD=224x168
 	images = mergeAArrays(video.images[0].variants)
-	' seems to be the best fit
+	' mittel16x9 seems to be the best fit
     content.SDPosterUrl= images.mittel16x9
+	content.HDPosterUrl= images.mittel16x9
 	return content
 End Function
 
-Function parseJSON(json As String) As Object
-	null = invalid
-	jsonObject = invalid
-	' get rid of quotes around keys
-	regex = CreateObject("roRegex", Chr(34) + "([a-zA-Z0-9_\-\s]*)" + Chr(34) + "\s*\:", "i" )
-	json = regex.replaceAll(json, "\1\:")
-	' correct leading comma
-	regex = CreateObject("roRegex", "\n,\n", "m" )
-	json = regex.replaceAll(json, "," + CHR(10))
-	regex = CreateObject("roRegex", "\n,\{\n", "m" )
-	json = regex.replaceAll(json, "," + CHR(10) + "{")
-	' correct escaped quotes
-	regex = CreateObject("roRegex","\\" + Chr(34), "i" )
-	json = regex.ReplaceAll(json, Chr(34) + " + Chr(34) + " + Chr(34))
-	' eval json
-	eval("jsonObject = " + json)
-	return jsonObject
+Function getReleaseDate(video As Object)
+	date = left(video.broadcastDate, 10)
+	year = left(date, 4)
+	month = mid(date, 6, 2)	
+	day = right(date, 2)	
+	return day + "." + month + "." + year
 End Function
 
+Function getReleaseTime(video As Object)
+	date = mid(video.broadcastDate, 12, 5)
+	return date
+End Function
+
+Function getDescriptionLine2(content As Object, video As Object)
+	result = content.ReleaseDate
+	result = result + " | " + getReleaseTime(video) + " Uhr"
+	' get duration in min
+	durationMin% = content.Length / 60
+	durationSec% = content.Length - (durationMin% * 60)
+	if (durationSec% < 10)
+		durationSecString = "0" + durationSec%.tostr()
+	else 
+		durationSecString = durationSec%.tostr()
+	end if
+	durationString = "" + durationMin%.tostr() + ":" + durationSecString
+	result = result + " | " + durationString + " min"
+	return result
+End Function
+	
+Function getStreams(video As Object)
+    streams = CreateObject("roList")
+	mediadata = mergeAArrays(video.mediadata)	
+	' TODO: get bitrate info from tagesschau
+	stream = getStream(mediadata, "h264s", 100)
+	streams.AddTail(stream)
+	stream = getStream(mediadata, "h264m", 1000)
+	streams.AddTail(stream)
+	stream = getStream(mediadata, "h264l", 2000)
+	streams.AddTail(stream)
+	return streams
+End Function
+
+Function getStream(mediadata As Object, format as String, bitrate As Integer) 
+    stream = CreateObject("roAssociativeArray")
+	stream.url = mediadata.Lookup(format)
+	stream.bitrate = bitrate
+	stream.quality = false
+	return stream
+End Function
