@@ -7,18 +7,18 @@
 
 Sub Main()
     initTheme()
-    showPosterScreen()
+	categories = getCategories()
+    showPosterScreen(categories)
 End Sub
 
-Function showPosterScreen() As Integer
-    port=CreateObject("roMessagePort")
+Function showPosterScreen(categories As Object) As Integer
+    port = CreateObject("roMessagePort")
     screen = CreateObject("roPosterScreen")
     screen.SetMessagePort(port)
     screen.SetListStyle("arced-landscape")
-	
-    categories = ["Aktuell", "Dossier", "Archiv", "Impressum"]
-    screen.SetListNames(categories)
-    'screen.SetContentList(getShowsForCategoryItem(categories[0]))
+    categoryNames = getCategoryNames(categories)
+    screen.SetListNames(categoryNames)
+    'screen.SetContentList(categories[0].items)
     screen.Show()
 
     while true
@@ -30,7 +30,7 @@ Function showPosterScreen() As Integer
 					showImpressumScreen()
 					screen.setFocusedList(0)
 				else
-					'screen.SetContentList(getShowsForCategoryItem(categories[msg.GetIndex()]))				
+					'screen.SetContentList(categories[msg.GetIndex()].items)				
 				end if
 			else if msg.isListItemSelected() then
                 print "list item selected | current show = "; msg.GetIndex() 
@@ -41,3 +41,14 @@ Function showPosterScreen() As Integer
     end while
 
 End Function
+
+Function getCategoryNames(categories As Object) As Object 
+	categoryNames = CreateObject("roList")
+    for each category in categories
+		categoryNames.addTail(category.name)
+	end for
+	' add special category Impressum
+	categoryNames.addTail("Impressum")
+	return categoryNames
+End Function
+
