@@ -1,10 +1,3 @@
-' TODOs
-' - Graphics from Tagesschau
-' - Colors for Buttons and Buttontext
-' - Colors for (Impressum) Title
-' - JSON Parsing for Aktuell, Dossier and Archiv
-
-
 Sub Main()
     initTheme()
 	categories = getCategories()
@@ -26,7 +19,7 @@ Function showPosterScreen(categories As Object) As Integer
         if type(msg) = "roPosterScreenEvent" then
             print "showPosterScreen | msg = "; msg.GetMessage() " | index = "; msg.GetIndex()			
             if msg.isListFocused() then
-				if((msg.getIndex() + 1)  = categories.Count())
+				if((msg.getIndex())  = categories.Count())
 					showImpressumScreen()
 					screen.setFocusedList(0)
 				else
