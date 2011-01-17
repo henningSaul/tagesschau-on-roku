@@ -7,36 +7,33 @@ End Sub
 Function getTheme() As Object 
 	theme = CreateObject("roAssociativeArray")
 	' General Colors
-	theme.BackgroundColor = "#1977C0"
-	theme.ParagraphTitleText = "#FFFFFF"
-	theme.ParagraphHeaderText = "#FFFFFF"
-	theme.ParagraphBodyText = "#FFFFFF"
-	theme.BreadcrumbTextLeft = "#FFFFFF"
-	theme.BreadcrumbDelimiter = "#FFFFFF"
-	theme.BreadcrumbTextRight = "#FFFFFF"
+	theme.BackgroundColor = "#C3D1EB"
+	theme.ParagraphTitleText = "#C3D1EB"
+	theme.ParagraphHeaderText = "#6C85BB"
+	theme.ParagraphBodyText = "#000044"
+	theme.ButtonHighlightColor = "#C3D1EB"
 	' PosterScreen colors
-	theme.PosterScreenLine1Text = "#FFFFFF"
-	theme.PosterScreenLine2Text = "#DDDD00"
+	theme.PosterScreenLine1Text = "#000044"
+	theme.PosterScreenLine2Text = "#6C85BB"
 	' FilterBanner colors and images
-	theme.FilterBannerActiveColor = "#FFFFFF"
-	'theme.FilterBannerInactiveColor = "#666600"
-	'theme.FilterBannerSideColor = "#DDDDDD"
-	'theme.FilterBannerSliceSD = "pkg:/images/Overhang_Slice_SD43.png"
-	'theme.FilterBannerActiveSD = "pkg:/images/Overhang_Slice_SD43.png"
-	'theme.FilterBannerInactiveSD = "pkg:/images/Overhang_Slice_SD43.png"
-	'theme.FilterBannerSliceHD = "pkg:/images/Overhang_Slice_SD43.png"
-	'theme.FilterBannerActiveHD = "pkg:/images/Overhang_Slice_SD43.png"
-	'theme.FilterBannerInactiveHD = "pkg:/images/Overhang_Slice_SD43.png"	
-	' TODO: check if images can be loaded via HTTP
+	theme.FilterBannerActiveColor = "#000044"
+	theme.FilterBannerInactiveColor = "#000044"
+	theme.FilterBannerSideColor = "#FFFFFF"
+	theme.FilterBannerSliceSD = "pkg:/images/FilterBanner_Slice.png"
+	theme.FilterBannerActiveSD = "pkg:/images/FilterBanner_Active.png"
+	theme.FilterBannerInactiveSD = "pkg:/images/FilterBanner_Slice.png"
+	theme.FilterBannerSliceHD = "pkg:/images/FilterBanner_Slice.png"
+	theme.FilterBannerActiveHD = "pkg:/images/FilterBanner_Active.png"
+	theme.FilterBannerInactiveHD = "pkg:/images/FilterBanner_Slice.png"
 	' SD Overhang
     theme.OverhangOffsetSD_X = "72"
     theme.OverhangOffsetSD_Y = "25"
-    'theme.OverhangLogoSD  = "pkg:/images/tagesschau.jpg"
+    theme.OverhangLogoSD  = "pkg:/images/Logo_Overhang.png"
     'theme.OverhangSliceSD = "pkg:/images/Overhang_Slice_SD43.png"
 	' HD Overhang
     theme.OverhangOffsetHD_X = "123"
     theme.OverhangOffsetHD_Y = "48"
-    theme.OverhangSliceHD = "pkg:/images/TODO.png"
+    theme.OverhangSliceHD = "pkg:/images/Logo_Overhang.png"
     theme.OverhangLogoHD  = "pkg:/images/TODO.png"
 	Return theme
 End Function

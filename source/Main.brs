@@ -20,11 +20,11 @@ Function showPosterScreen() As Integer
         if type(msg) = "roPosterScreenEvent" then
             print "showPosterScreen | msg = "; msg.GetMessage() " | index = "; msg.GetIndex()			
             if msg.isListFocused() then
-				if((msg.getIndex())  = categories.Count())
+				if((msg.getIndex() + 1) = categoryNames.Count())
 					showImpressumScreen()
 					screen.setFocusedList(0)
 				else
-					screen.SetContentList(categories[msg.GetIndex()].items)				
+					screen.SetContentList(categories[0].items)				
 				end if
 			else if msg.isListItemSelected() then
                 print "list item selected | current show = "; msg.GetIndex() 
@@ -61,6 +61,8 @@ Function getCategoryNames(categories As Object) As Object
     for each category in categories
 		categoryNames.addTail(category.name)
 	end for
+	categoryNames.addTail("Blub")
+	categoryNames.addTail("Bla")
 	' add special category Impressum
 	categoryNames.addTail("Impressum")
 	return categoryNames

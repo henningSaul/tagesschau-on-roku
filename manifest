@@ -1,9 +1,9 @@
 title=tagesschau
-subtitle=tagesschau news and shows on demand
+subtitle=On demand news in German from ARD-aktuell
 major_version=1
 minor_version=0
 build_version=0
-mm_icon_focus_hd=pkg:/images/mm_icon_focus_hd.png
-mm_icon_side_hd=pkg:/images/mm_icon_side_hd.png
-mm_icon_focus_sd=pkg:/images/mm_icon_focus_sd.png
-mm_icon_side_sd=pkg:/images/mm_icon_side_sd.png
+mm_icon_focus_hd=pkg:/images/Logo_Main.png
+mm_icon_side_hd=pkg:/images/Logo_Main.png
+mm_icon_focus_sd=pkg:/images/Logo_Main.png
+mm_icon_side_sd=pkg:/images/Logo_Main.png
