@@ -26,14 +26,14 @@ Function getTheme() As Object
 	theme.FilterBannerActiveHD = "pkg:/images/FilterBanner_Active.png"
 	theme.FilterBannerInactiveHD = "pkg:/images/FilterBanner_Slice.png"
 	' SD Overhang
-    theme.OverhangOffsetSD_X = "72"
-    theme.OverhangOffsetSD_Y = "25"
+    theme.OverhangOffsetSD_X = "40"
+    theme.OverhangOffsetSD_Y = "20"
     theme.OverhangLogoSD  = "pkg:/images/Logo_Overhang.png"
-    'theme.OverhangSliceSD = "pkg:/images/Overhang_Slice_SD43.png"
+    theme.OverhangSliceSD = "pkg:/images/Overhang_Slice.png"
 	' HD Overhang
     theme.OverhangOffsetHD_X = "123"
     theme.OverhangOffsetHD_Y = "48"
-    theme.OverhangSliceHD = "pkg:/images/Logo_Overhang.png"
-    theme.OverhangLogoHD  = "pkg:/images/TODO.png"
+    theme.OverhangLogoHD  = "pkg:/images/Logo_Overhang.png"
+    theme.OverhangSliceHD = "pkg:/images/Overhang_Slice.png"
 	Return theme
 End Function
