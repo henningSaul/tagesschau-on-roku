@@ -2,7 +2,16 @@ Function getCategories() As Object
     categories = CreateObject("roList")
 	'category = getCategory("Test", "http://10.0.1.5/test.json")
 	'categories.AddTail(category)
-	category = getCategory("Dossier", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	' TODO: Aktuell
+	category = getCategory("Aktuell", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	categories.AddTail(category)
+	category = getCategory("Ressorts", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	categories.AddTail(category)
+	' TODO: Sendungen
+	category = getCategory("Sendungen", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	categories.AddTail(category)
+	' TODO: Archiv
+	category = getCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
 	categories.AddTail(category)
 	return categories	
 End Function
@@ -10,21 +19,26 @@ End Function
 Function getCategory(name As String, url As String) As Object
     category = CreateObject("roAssociativeArray")
 	category.name = name
+	category.url = url
+	return category
+End Function
+
+Function getCategoryItems(category As Object) As Object
 	' get JSON from tagesschau
     urlTransfer = CreateObject("roUrlTransfer")
-    urlTransfer.SetUrl(url)
-	print "getCategory() retrieving JSON from " + url
+    urlTransfer.SetUrl(category.url)
+	print "getCategory() retrieving JSON for category " + category.name + " from " + category.url
     json = urlTransfer.GetToString()
 	parsedJSON = parseJSON(json)
 	if(parsedJSON = invalid)
 		print "Failed to parse JSON from " + url
+		return invalid
 	else
-		category.items = getCategoryItems(parsedJSON) 
+		return getCategoryItemsFromParsedJSON(parsedJSON) 
 	end if
-	return category
 End Function
 
-Function getCategoryItems(parsedJSON As Object) As Object 
+Function getCategoryItemsFromParsedJSON(parsedJSON As Object) As Object 
     items = CreateObject("roList")
 	for each video in parsedJSON.videos
 		content = getVideo(video)
