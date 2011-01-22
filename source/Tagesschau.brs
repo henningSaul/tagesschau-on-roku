@@ -1,17 +1,14 @@
 Function getCategories() As Object
     categories = CreateObject("roList")
-	'category = getCategory("Test", "http://10.0.1.5/test.json")
-	'categories.AddTail(category)
-	' TODO: Aktuell
-	category = getCategory("Aktuell", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	' TODO: Aktuell, crashes the Roku... too big? Extract relevant JSON or alternative JSON/URL available?
+	'category = getCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
+	category = getCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
 	categories.AddTail(category)
-	category = getCategory("Ressorts", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	' Archiv/Sendungen
+	category = getCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemandarchiv100.json")
 	categories.AddTail(category)
-	' TODO: Sendungen
-	category = getCategory("Sendungen", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
-	categories.AddTail(category)
-	' TODO: Archiv
-	category = getCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	' Dossier
+	category = getCategory("Dossier", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
 	categories.AddTail(category)
 	return categories	
 End Function
@@ -31,7 +28,7 @@ Function getCategoryItems(category As Object) As Object
     json = urlTransfer.GetToString()
 	parsedJSON = parseJSON(json)
 	if(parsedJSON = invalid)
-		print "Failed to parse JSON from " + url
+		print "Failed to parse JSON from " + category.url
 		return invalid
 	else
 		return getCategoryItemsFromParsedJSON(parsedJSON) 
@@ -58,10 +55,15 @@ Function getVideo(video As Object) As Object
     content.StreamFormat = "mp4"
 	content.Streams = getStreams(video)
 	' get image, Roku arced-landscape sizes: SD=214x144; HD=290x218, Roku arced-16x9 sizes: SD=166x112; HD=224x168
-	images = mergeAArrays(video.images[0].variants)
-	' mittel16x9 seems to be the best fit
-    content.SDPosterUrl= images.mittel16x9
-	content.HDPosterUrl= images.mittel16x9
+	if(video.images.Count() = 0)
+		content.SDPosterUrl = "pkg:/images/Logo_Main.png"
+		content.HDPosterUrl = "pkg:/images/Logo_Main.png"
+	else
+		images = mergeAArrays(video.images[0].variants)
+		' mittel16x9 seems to be the best fit
+		content.SDPosterUrl = images.mittel16x9
+		content.HDPosterUrl = images.mittel16x9
+	end if
 	return content
 End Function
 

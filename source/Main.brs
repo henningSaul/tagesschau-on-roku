@@ -7,8 +7,14 @@ Function showPosterScreen() As Integer
     port = CreateObject("roMessagePort")
     screen = CreateObject("roPosterScreen")
     screen.SetMessagePort(port)
-	'screen.SetListStyle("arced-16x9")
-    screen.SetListStyle("arced-landscape")	
+	' pic list style on aspect ratio
+	deviceInfo = CreateObject("roDeviceInfo")
+	aspectRatio = deviceInfo.GetDisplayAspectRatio()
+	if (aspectRatio = "4x3")
+		screen.SetListStyle("arced-16x9")
+	else
+		screen.SetListStyle("arced-landscape")	
+	end if
     screen.Show()
 	categories = getCategories()	
     categoryNames = getCategoryNames(categories)
