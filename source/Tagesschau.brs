@@ -1,8 +1,6 @@
 Function getCategories() As Object
     categories = CreateObject("roList")
-	' TODO: Aktuell, crashes the Roku... too big? Extract relevant JSON or alternative JSON/URL available?
-	'category = getCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
-	category = getCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	category = getCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
 	categories.AddTail(category)
 	' Archiv/Sendungen
 	category = getCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemandarchiv100.json")
@@ -26,6 +24,10 @@ Function getCategoryItems(category As Object) As Object
     urlTransfer.SetUrl(category.url)
 	print "getCategory() retrieving JSON for category " + category.name + " from " + category.url
     json = urlTransfer.GetToString()
+	' TODO: this is a little fragile.... maybe tagesschau has a dedicated URL for the Aktuell JSON  
+	' we need to remove some json elements, otherwise the Aktuell JSON parsing crashes the Roku, too big?
+	regex = CreateObject("roRegex", "^" + Chr(34) + "multimedia" + Chr(34) + "\:\ \[.*^" + Chr(34) +"broadcastArchive" + Chr(34) + "\:", "ms" )
+	json = regex.replaceAll(json, CHR(34) + "broadcastArchive" + CHR(34) + ":")
 	parsedJSON = parseJSON(json)
 	if(parsedJSON = invalid)
 		print "Failed to parse JSON from " + category.url
@@ -61,8 +63,14 @@ Function getVideo(video As Object) As Object
 	else
 		images = mergeAArrays(video.images[0].variants)
 		' mittel16x9 seems to be the best fit
-		content.SDPosterUrl = images.mittel16x9
-		content.HDPosterUrl = images.mittel16x9
+		if(images.mittel16x9 <> invalid)
+			content.SDPosterUrl = images.mittel16x9
+			content.HDPosterUrl = images.mittel16x9
+		else
+			' fallback for Aktuell/Wetter
+			content.SDPosterUrl = images.grossgalerie16x9
+			content.HDPosterUrl = images.grossgalerie16x9
+		end if
 	end if
 	return content
 End Function
