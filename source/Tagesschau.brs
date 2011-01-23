@@ -75,7 +75,7 @@ Function getVideo(video As Object) As Object
 	return content
 End Function
 
-Function getReleaseDate(video As Object)
+Function getReleaseDate(video As Object) As String
 	date = left(video.broadcastDate, 10)
 	year = left(date, 4)
 	month = mid(date, 6, 2)	
@@ -83,12 +83,12 @@ Function getReleaseDate(video As Object)
 	return day + "." + month + "." + year
 End Function
 
-Function getReleaseTime(video As Object)
+Function getReleaseTime(video As Object) As String
 	date = mid(video.broadcastDate, 12, 5)
 	return date
 End Function
 
-Function getDescriptionLine2(content As Object, video As Object)
+Function getDescriptionLine2(content As Object, video As Object) As String
 	result = content.ReleaseDate
 	result = result + " | " + getReleaseTime(video) + " Uhr"
 	' get duration in min
@@ -104,23 +104,24 @@ Function getDescriptionLine2(content As Object, video As Object)
 	return result
 End Function
 	
-Function getStreams(video As Object)
+Function getStreams(video As Object) as Object
     streams = CreateObject("roList")
 	mediadata = mergeAArrays(video.mediadata)	
 	' TODO: get bitrate info from tagesschau
-	stream = getStream(mediadata, "h264s", 100)
+	stream = getStream(video, mediadata, "h264s", 100)
 	streams.AddTail(stream)
-	stream = getStream(mediadata, "h264m", 1000)
+	stream = getStream(video, mediadata, "h264m", 1000)
 	streams.AddTail(stream)
-	stream = getStream(mediadata, "h264l", 2000)
+	stream = getStream(video, mediadata, "h264l", 2000)
 	streams.AddTail(stream)
 	return streams
 End Function
 
-Function getStream(mediadata As Object, format as String, bitrate As Integer) 
+Function getStream(video As Object, mediadata As Object, format as String, bitrate As Integer) As Object
     stream = CreateObject("roAssociativeArray")
 	stream.url = mediadata.Lookup(format)
 	stream.bitrate = bitrate
 	stream.quality = false
+	stream.contentid = video.sophoraId + "-" + format
 	return stream
 End Function
