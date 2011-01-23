@@ -9,11 +9,11 @@ Function showPosterScreen() As Integer
     screen.SetMessagePort(port)
 	' pic list style on aspect ratio
 	deviceInfo = CreateObject("roDeviceInfo")
-	aspectRatio = deviceInfo.GetDisplayAspectRatio()
-	if (aspectRatio = "4x3")
-		screen.SetListStyle("arced-16x9")
-	else
+	displayType = deviceInfo.GetDisplayType()
+	if (displayType = "16:9 anamorphic")
 		screen.SetListStyle("arced-landscape")	
+	else
+		screen.SetListStyle("arced-16x9")
 	end if
     screen.Show()
 	categories = getCategories()	
