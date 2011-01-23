@@ -1,7 +1,7 @@
 title=tagesschau
 subtitle=Die Nachrichten der ARD
-major_version=0
-minor_version=8
+major_version=1
+minor_version=0
 build_version=1
 mm_icon_focus_hd=pkg:/images/Logo_Main.png
 mm_icon_side_hd=pkg:/images/Logo_Main.png
