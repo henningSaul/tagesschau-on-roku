@@ -49,8 +49,8 @@ End Function
 Function getVideo(video As Object) As Object
     content = CreateObject("roAssociativeArray")
 	content.ContentType = "movie"
-	length = ((video.outMilli - video.inMilli) / 1000)
-	content.Length = length
+	length% = ((video.outMilli - video.inMilli) / 1000)
+	content.Length = length%
     content.ReleaseDate = getReleaseDate(video)
 	content.ShortDescriptionLine1 = video.headline
 	content.ShortDescriptionLine2 = getDescriptionLine2(content, video)
