@@ -3,7 +3,11 @@ Function newCategory(name As String, url As String) As Object
 	category.name = name
 	category.url = url
 	category.currentVideos = false
+	category.lastFetched = invalid
+	category.videos = invalid
 	category.GetVideos = catGetVideos
+	category.HasUpdate = catHasUpdate
+	category.FetchVideos = catFetchVideos
 	return category
 End Function
 
@@ -13,7 +17,26 @@ Function newCurrentVideosCategory(name As String, url As String) As Object
 	return category
 End Function
 
+Function catHasUpdate() As Boolean
+	if (m.lastFetched = invalid)
+		return true
+	end if
+	now = CreateObject("roDateTime")
+	' cache for 5 minutes
+	if(now.asSeconds() > m.lastFetched.asSeconds() + (5 * 60))
+		return true
+	end if
+	return false
+End Function
+
 Function catGetVideos() As Object
+	if(m.HasUpdate())
+		m.videos = m.FetchVideos()
+	end if
+	return m.videos
+End Function
+
+Function catFetchVideos() As Object
 	' get JSON
     urlTransfer = CreateObject("roUrlTransfer")
     urlTransfer.SetUrl(m.url)
@@ -31,7 +54,9 @@ Function catGetVideos() As Object
 		print "Failed to parse JSON from " + m.url
 		return invalid
 	else
-		return getCategoryItemsFromParsedJSON(parsedJSON) 
+		items = getCategoryItemsFromParsedJSON(parsedJSON) 
+		m.lastFetched = CreateObject("roDateTime")
+		return items
 	end if
 End Function
 
