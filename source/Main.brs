@@ -7,7 +7,7 @@ Function showPosterScreen() As Integer
     port = CreateObject("roMessagePort")
     screen = CreateObject("roPosterScreen")
     screen.SetMessagePort(port)
-	' pic list style on aspect ratio
+	' pick list style depending on aspect ratio
 	deviceInfo = CreateObject("roDeviceInfo")
 	displayType = deviceInfo.GetDisplayType()
 	if (displayType = "16:9 anamorphic")
@@ -19,7 +19,7 @@ Function showPosterScreen() As Integer
 	categories = getCategories()	
     categoryNames = getCategoryNames(categories)
     screen.SetListNames(categoryNames)
-	contentList = getCategoryItems(categories[0])
+	contentList = categories[0].getVideos()
     screen.SetContentList(contentList)
 
     while true
@@ -31,7 +31,8 @@ Function showPosterScreen() As Integer
 					screen.setFocusedList(0)
 				else
 					screen.setContentList(invalid)
-					screen.SetContentList(getCategoryItems(categories[msg.GetIndex()]))
+					category = categories[msg.GetIndex()]
+					screen.SetContentList(category.GetVideos())
 					screen.SetFocusedListItem(0)
 				end if
 			else if msg.isListItemSelected() then                
@@ -43,6 +44,20 @@ Function showPosterScreen() As Integer
 		end if
     end while
 
+End Function
+
+Function getCategories() As Object
+    categories = CreateObject("roList")
+	' Aktuelle Videos
+	category = newCurrentVideosCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
+	categories.AddTail(category)
+	' (Sendungs) Archiv
+	category = newCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemandarchiv100.json")
+	categories.AddTail(category)
+	' Dossier Videos
+	category = newCategory("Dossier", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
+	categories.AddTail(category)
+	return categories	
 End Function
 
 Function displayVideo(content As Object)

@@ -1,42 +1,41 @@
-Function getCategories() As Object
-    categories = CreateObject("roList")
-	category = getCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
-	categories.AddTail(category)
-	' Archiv/Sendungen
-	category = getCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemandarchiv100.json")
-	categories.AddTail(category)
-	' Dossier
-	category = getCategory("Dossier", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
-	categories.AddTail(category)
-	return categories	
-End Function
-
-Function getCategory(name As String, url As String) As Object
+Function newCategory(name As String, url As String) As Object
     category = CreateObject("roAssociativeArray")
 	category.name = name
 	category.url = url
+	category.currentVideos = false
+	category.GetVideos = catGetVideos
 	return category
 End Function
 
-Function getCategoryItems(category As Object) As Object
-	' get JSON from tagesschau
+Function newCurrentVideosCategory(name As String, url As String) As Object
+    category = newCategory(name, url)
+	category.currentVideos = true
+	return category
+End Function
+
+Function catGetVideos() As Object
+	' get JSON
     urlTransfer = CreateObject("roUrlTransfer")
-    urlTransfer.SetUrl(category.url)
-	print "getCategory() retrieving JSON for category " + category.name + " from " + category.url
+    urlTransfer.SetUrl(m.url)
+	print "getVideos() retrieving JSON for category " + m.name + " from " + m.url
     json = urlTransfer.GetToString()
-	' TODO: this is a little fragile.... maybe tagesschau has a dedicated URL for the Aktuell JSON  
-	' we need to remove some json elements, otherwise the Aktuell JSON parsing crashes the Roku, too big?
-	regex = CreateObject("roRegex", "^" + Chr(34) + "multimedia" + Chr(34) + "\:\ \[.*^" + Chr(34) +"broadcastArchive" + Chr(34) + "\:", "ms" )
-	json = regex.replaceAll(json, CHR(34) + "broadcastArchive" + CHR(34) + ":")
+	' special handling for current videos...
+	if(m.currentVideos)
+		' TODO: this is a little fragile.... maybe tagesschau has a dedicated URL for the Aktuell JSON  
+		' we need to remove some json elements, otherwise the Aktuell JSON parsing crashes the Roku, too big?
+		regex = CreateObject("roRegex", "^" + Chr(34) + "multimedia" + Chr(34) + "\:\ \[.*^" + Chr(34) +"broadcastArchive" + Chr(34) + "\:", "ms" )
+		json = regex.replaceAll(json, CHR(34) + "broadcastArchive" + CHR(34) + ":")	
+	end if
 	parsedJSON = parseJSON(json)
 	if(parsedJSON = invalid)
-		print "Failed to parse JSON from " + category.url
+		print "Failed to parse JSON from " + m.url
 		return invalid
 	else
 		return getCategoryItemsFromParsedJSON(parsedJSON) 
 	end if
 End Function
 
+' Helper methods for translating JSON to content
 Function getCategoryItemsFromParsedJSON(parsedJSON As Object) As Object 
     items = CreateObject("roList")
 	for each video in parsedJSON.videos
