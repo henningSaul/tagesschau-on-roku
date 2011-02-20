@@ -23,8 +23,10 @@ Function parseJSON(json As String) As Object
 	' correct escaped quotes
 	regex = CreateObject("roRegex","\\" + Chr(34), "i" )
 	json = regex.ReplaceAll(json, Chr(34) + " + Chr(34) + " + Chr(34))
+	' remove empty lines
+	regex = CreateObject("roRegex", "^\n", "m" )
+	json = regex.replaceAll(json, "")	
 	' eval json
-	print json
 	eval("jsonObject = " + json)
 	return jsonObject
 End Function

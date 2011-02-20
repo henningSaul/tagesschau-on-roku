@@ -17,16 +17,20 @@ Function broadcastGetStreams(broadcast As Object) as Object
     urlTransfer.SetUrl(url)
 	print "broadcastGetStreams() retrieving JSON from " + url
     json = urlTransfer.GetToString()
-	' WIP/TODO.... parsing everything crashes Roku, extract "fullvideo"
-	regex = CreateObject("roRegex", "^" + Chr(34) + "fullvideo" + Chr(34) + "\:\ \[(.*?)^" + Chr(34) +"endOfContent" + Chr(34) + "\: null", "ms" )
+	' parsing everything crashes Roku, try to extract "fullvideo" JSON, again this is somewhat fragile
+	regex = CreateObject("roRegex", "^" + Chr(34) + "fullvideo" + Chr(34) + "\:\ \[(.*?),\n^" + Chr(34) +"endOfContent" + Chr(34) + "\: null", "ms" )
 	match = regex.Match(json)
-	json = match[1]
-	parsedJSON = parseJSON(json)
-	if(parsedJSON = invalid)
+	if(match[1] = invalid) 
+		print "Failed to extract fullvideo JSON from " + url
+		return invalid	
+	end if
+	json = match[1] + "}"
+	fullvideo = parseJSON(json)
+	if(fullvideo = invalid)
 		print "Failed to parse JSON from " + url
 		return invalid
 	else
-		' TODO
+		return m.SuperGetStreams(fullvideo)
 	end if
 End Function
 
