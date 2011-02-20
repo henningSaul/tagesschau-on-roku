@@ -14,7 +14,7 @@ End Function
 
 Function videoAsContent() 
 	content = CreateObject("roAssociativeArray")
-	content.ContentType = "video"
+	content.ContentType = "episode"
 	video = m.source
 	' Length
 	if(video.outMilli <> invalid)

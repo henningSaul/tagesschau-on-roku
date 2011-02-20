@@ -83,7 +83,12 @@ Function showSpringboardScreen(contentList As Object, index As Integer)
     screen.AllowUpdates(false)
 	updateSpringboardScreen(screen, contentList[currentIndex])    
     screen.SetDescriptionStyle("movie")
-	screen.SetPosterStyle("rounded-rect-16x9-generic")
+	' pick list style depending on aspect ratio
+	deviceInfo = CreateObject("roDeviceInfo")
+	displayType = deviceInfo.GetDisplayType()
+	if (displayType <> "16:9 anamorphic")
+		screen.SetPosterStyle("rounded-rect-16x9-generic")
+	end if
     screen.ClearButtons()
     screen.AddButton(1,"Play")
     screen.AddButton(2,"Go Back")
