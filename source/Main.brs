@@ -21,7 +21,6 @@ Function showPosterScreen() As Integer
     screen.SetListNames(categoryNames)
 	contentList = categories[0].getVideos()
     screen.SetContentList(contentList)
-
     while true
         msg = wait(0, screen.GetMessagePort())
         if type(msg) = "roPosterScreenEvent" then            
@@ -35,9 +34,8 @@ Function showPosterScreen() As Integer
 					screen.SetContentList(category.GetVideos())
 					screen.SetFocusedListItem(0)
 				end if
-			else if msg.isListItemSelected() then                
-				content = screen.getContentList()[msg.GetIndex()]
-				displayVideo(content)
+			else if msg.isListItemSelected() then                				
+				displayVideo(screen.GetContentList(), msg.GetIndex())
             else if msg.isScreenClosed() then
                 return -1
             end if
@@ -63,25 +61,27 @@ Function getCategories() As Object
 	return categories	
 End Function
 
-Function displayVideo(content As Object)
-	' lazy loading for Broadcasts
-	if(not content.hasFetchedDetails)
-		content.FetchDetails()
-	end if
+Function displayVideo(contentList As Object, index As Integer)
+	content = contentList[index]
 	' show SpringBoardScreen if we have a description (broadcasts only)
 	if(content.Description = invalid)
+		' lazy loading for Broadcasts
+		if(not content.hasFetchedDetails)
+			content.FetchDetails()
+		end if
 		playVideo(content)
 	else
-		showSpringboardScreen(content)
+		showSpringboardScreen(contentList, index)
 	end	if
 End Function
 
-Function showSpringboardScreen(content As object)
+Function showSpringboardScreen(contentList As Object, index As Integer)
+	currentIndex = index
     port = CreateObject("roMessagePort")
     screen = CreateObject("roSpringboardScreen")
     screen.SetMessagePort(port)
     screen.AllowUpdates(false)
-    screen.SetContent(content)
+	updateSpringboardScreen(screen, contentList[currentIndex])    
     screen.SetDescriptionStyle("movie")
 	screen.SetPosterStyle("rounded-rect-16x9-generic")
     screen.ClearButtons()
@@ -90,20 +90,45 @@ Function showSpringboardScreen(content As object)
     screen.SetStaticRatingEnabled(false)
     screen.AllowUpdates(true)
     screen.Show()
-    while true
-        msg = wait(0, screen.GetMessagePort())
-        if type(msg) = "roSpringboardScreenEvent"
-            if msg.isScreenClosed()
-                exit while                
-            else if msg.isButtonPressed()
-                    if msg.GetIndex() = 1
-                         playVideo(content)
-                    else if msg.GetIndex() = 2
-                         return true
-                    endif
-            endif
-        endif
-    end while
+	while true
+		msg = wait(0, screen.GetMessagePort())
+		if (type(msg) = "roSpringboardScreenEvent")
+			if (msg.isScreenClosed())
+				exit while                
+			' selected either the Play or Go Back Button
+			else if (msg.isButtonPressed())
+				if msg.GetIndex() = 1
+					playVideo(contentList[currentIndex])
+				else if (msg.GetIndex() = 2)
+					return true
+				end if
+			' shuffling through videos with left and right keys
+			else if (msg.isRemoteKeyPressed())
+				if (msg.GetIndex() = 4) 
+					if (currentIndex > 0)
+						currentIndex = currentIndex - 1
+					else
+						currentIndex = contentList.Count() - 1
+					end if					
+				else if (msg.GetIndex() = 5)
+					if(currentIndex < (contentList.Count() - 1))
+						currentIndex = currentIndex + 1
+					else
+						currentIndex = 0	
+					end if
+				end if
+				updateSpringboardScreen(screen, contentList[currentIndex])	
+			end if
+		end if
+	end while	
+End Function
+
+Function updateSpringboardScreen(screen As Object, content As Object)
+	' lazy loading for Broadcasts
+	if(not content.hasFetchedDetails)
+		content.FetchDetails()
+	end if
+	screen.SetContent(content)
 End Function
 
 Function playVideo(content As Object)
@@ -117,7 +142,7 @@ Function playVideo(content As Object)
         if type(msg) = "roVideoScreenEvent"
             if msg.isScreenClosed() then
                 exit while
-            endif
+            end if
         end if
     end while
 End Function
