@@ -6,8 +6,9 @@ Function newVideo(source as Object) As Object
 	video.GetReleaseTime = videoGetReleaseTime
 	video.GetDescriptionLine1 = videoGetDescriptionLine1
 	video.GetDescriptionLine2 = videoGetDescriptionLine2
-	video.GetStreams = videoGetStreams
-	video.GetStream = videoGetStream
+	video.GetImages = videoGetImages
+	' support for lazy loading in Broadcast.brs
+	video.GetDetails = videoGetDetails
 	return video
 End Function
 
@@ -19,11 +20,17 @@ Function videoAsContent()
 		length% = ((video.outMilli - video.inMilli) / 1000)
 		content.Length = length%
 	end if
-    content.ReleaseDate = m.GetReleaseDate(video)
-	content.ShortDescriptionLine1 = m.GetDescriptionLine1(content, video)
-	content.ShortDescriptionLine2 = m.GetDescriptionLine2(content, video)
+    content.ReleaseDate = m.GetReleaseDate()
+	content.ShortDescriptionLine1 = m.GetDescriptionLine1(content)
+	content.ShortDescriptionLine2 = m.GetDescriptionLine2(content)
+	m.GetImages(content)
     content.StreamFormat = "mp4"
-	content.Streams = m.GetStreams(video)
+	m.GetDetails(content)
+	return content
+End Function
+
+Function videoGetImages(content as Object)
+	video = m.source
 	' get image, Roku arced-landscape sizes: SD=214x144; HD=290x218, Roku arced-16x9 sizes: SD=166x112; HD=224x168
 	if(video.images.Count() = 0)
 		content.SDPosterUrl = "pkg:/images/Logo_Main.png"
@@ -39,11 +46,17 @@ Function videoAsContent()
 			content.SDPosterUrl = images.grossgalerie16x9
 			content.HDPosterUrl = images.grossgalerie16x9
 		end if
-	end if
-	return content
+	end if	
 End Function
 
-Function videoGetReleaseDate(video As Object) As Object
+Function videoGetDetails(content as Object)
+	video = m.source
+	content.Streams = getStreams(video)
+	content.hasFetchedDetails = true
+End Function
+
+Function videoGetReleaseDate() As Object
+	video = m.source
 	if (video.broadcastDate = invalid)
 		return invalid
 	end if
@@ -54,7 +67,8 @@ Function videoGetReleaseDate(video As Object) As Object
 	return day + "." + month + "." + year
 End Function
 
-Function videoGetReleaseTime(video As Object) As Object
+Function videoGetReleaseTime() As Object
+	video = m.source
 	if (video.broadcastDate = invalid)
 		return invalid
 	end if
@@ -62,16 +76,18 @@ Function videoGetReleaseTime(video As Object) As Object
 	return date
 End Function
 
-Function videoGetDescriptionLine1(content As Object, video As Object) As String
+Function videoGetDescriptionLine1(content As Object) As String
+	video = m.source
 	return video.headline
 End Function
 
-Function videoGetDescriptionLine2(content As Object, video As Object) As String
+Function videoGetDescriptionLine2(content As Object) As String
+	video = m.source
 	result = ""
 	if(content.ReleaseDate <> invalid) 
 		result = content.ReleaseDate
 	end if
-	releaseTime = m.GetReleaseTime(video)
+	releaseTime = m.GetReleaseTime()
 	if(releaseTime <> invalid) 
 		result = result + " | " + releaseTime + " Uhr"
 	end if
@@ -90,26 +106,28 @@ Function videoGetDescriptionLine2(content As Object, video As Object) As String
 	return result
 End Function
 	
-Function videoGetStreams(video As Object) as Object
+' "static" helper method	
+Function getStreams(video As Object) as Object
     streams = CreateObject("roList")
 	mediadata = mergeAArrays(video.mediadata)	
 	' TODO: get bitrate info from tagesschau
-	stream = m.GetStream(video, mediadata, "h264s", 100)
+	stream = getStream(video, mediadata, "h264s", 100)
 	if(stream <> invalid)
 		streams.AddTail(stream)
 	end if
-	stream = m.GetStream(video, mediadata, "h264m", 1000)
+	stream = getStream(video, mediadata, "h264m", 1000)
 	if(stream <> invalid)
 		streams.AddTail(stream)
 	end if
-	stream = m.GetStream(video, mediadata, "h264l", 2000)
+	stream = getStream(video, mediadata, "h264l", 2000)
 	if(stream <> invalid)
 		streams.AddTail(stream)
 	end if
 	return streams
 End Function
 
-Function videoGetStream(video As Object, mediadata As Object, format as String, bitrate As Integer) As Object
+' "static" helper method	
+Function getStream(video As Object, mediadata As Object, format as String, bitrate As Integer) As Object
     stream = CreateObject("roAssociativeArray")
 	stream.url = mediadata.Lookup(format)
 	if(stream.url = invalid)

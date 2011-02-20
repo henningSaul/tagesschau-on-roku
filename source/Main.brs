@@ -64,6 +64,11 @@ Function getCategories() As Object
 End Function
 
 Function displayVideo(content As Object)
+	' lazy loading for Broadcasts
+	if(not content.hasFetchedDetails)
+		content.FetchDetails()
+	end if
+	' playback video
     p = CreateObject("roMessagePort")
     video = CreateObject("roVideoScreen")
     video.setMessagePort(p)
