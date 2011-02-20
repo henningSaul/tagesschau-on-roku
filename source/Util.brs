@@ -24,6 +24,7 @@ Function parseJSON(json As String) As Object
 	regex = CreateObject("roRegex","\\" + Chr(34), "i" )
 	json = regex.ReplaceAll(json, Chr(34) + " + Chr(34) + " + Chr(34))
 	' eval json
+	print json
 	eval("jsonObject = " + json)
 	return jsonObject
 End Function

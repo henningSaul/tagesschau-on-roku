@@ -51,6 +51,9 @@ Function getCategories() As Object
 	' Aktuelle Videos
 	category = newCurrentVideosCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
 	categories.AddTail(category)
+	' Alle (aktuellen) Sendungen
+	category = newLastBroadcastsCategory("Alle Sendungen", "http://www.tagesschau.de/api/multimedia/sendung/letztesendungen100.json")
+	categories.AddTail(category)
 	' (Sendungs) Archiv
 	category = newCategory("Archiv", "http://www.tagesschau.de/api/multimedia/video/ondemandarchiv100.json")
 	categories.AddTail(category)
