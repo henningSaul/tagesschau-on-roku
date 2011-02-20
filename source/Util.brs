@@ -28,6 +28,5 @@ Function parseJSON(json As String) As Object
 	json = regex.ReplaceAll(json, Chr(34) + " + Chr(34) + " + Chr(34))
 	' eval json
 	eval("jsonObject = " + json)
-	stop
 	return jsonObject
 End Function
