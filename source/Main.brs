@@ -68,7 +68,45 @@ Function displayVideo(content As Object)
 	if(not content.hasFetchedDetails)
 		content.FetchDetails()
 	end if
-	' playback video
+	' show SpringBoardScreen if we have a description (broadcasts only)
+	if(content.Description = invalid)
+		playVideo(content)
+	else
+		showSpringboardScreen(content)
+	end	if
+End Function
+
+Function showSpringboardScreen(content As object)
+    port = CreateObject("roMessagePort")
+    screen = CreateObject("roSpringboardScreen")
+    screen.SetMessagePort(port)
+    screen.AllowUpdates(false)
+    screen.SetContent(content)
+    screen.SetDescriptionStyle("movie")
+	screen.SetPosterStyle("rounded-rect-16x9-generic")
+    screen.ClearButtons()
+    screen.AddButton(1,"Play")
+    screen.AddButton(2,"Go Back")
+    screen.SetStaticRatingEnabled(false)
+    screen.AllowUpdates(true)
+    screen.Show()
+    while true
+        msg = wait(0, screen.GetMessagePort())
+        if type(msg) = "roSpringboardScreenEvent"
+            if msg.isScreenClosed()
+                exit while                
+            else if msg.isButtonPressed()
+                    if msg.GetIndex() = 1
+                         playVideo(content)
+                    else if msg.GetIndex() = 2
+                         return true
+                    endif
+            endif
+        endif
+    end while
+End Function
+
+Function playVideo(content As Object)
     p = CreateObject("roMessagePort")
     video = CreateObject("roVideoScreen")
     video.setMessagePort(p)

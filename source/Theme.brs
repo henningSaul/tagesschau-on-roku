@@ -8,10 +8,15 @@ Function getTheme() As Object
 	theme = CreateObject("roAssociativeArray")
 	' General Colors
 	theme.BackgroundColor = "#194780"
+	theme.SpringboardTitleText = "#FFFFFF"
+	theme.SpringboardSynopsisColor = "#A5ADC1"
+	theme.SpringboardRuntimeColor = "#A5ADC1"
 	theme.ParagraphTitleText = "#FFFFFF"
 	theme.ParagraphHeaderText = "#A5ADC1"
 	theme.ParagraphBodyText = "#FFFFFF"
 	theme.ButtonHighlightColor = "#FFFFFF"
+	theme.ButtonMenuHighlightText = "#FFFFFF"
+	theme.ButtonMenuNormalText = "#A5ADC1"
 	' PosterScreen colors
 	theme.PosterScreenLine1Text = "#FFFFFF"
 	theme.PosterScreenLine2Text = "#A5ADC1"
@@ -31,5 +36,5 @@ Function getTheme() As Object
     theme.OverhangOffsetHD_X = "10"
     theme.OverhangOffsetHD_Y = "11"
     theme.OverhangLogoHD  = "pkg:/images/Logo_Overhang_HD.png"
-	Return theme
+	return theme
 End Function

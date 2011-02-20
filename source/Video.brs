@@ -14,15 +14,30 @@ End Function
 
 Function videoAsContent() 
 	content = CreateObject("roAssociativeArray")
-	content.ContentType = "movie"
+	content.ContentType = "video"
 	video = m.source
+	' Length
 	if(video.outMilli <> invalid)
 		length% = ((video.outMilli - video.inMilli) / 1000)
 		content.Length = length%
 	end if
+	' Description from topics	
+	if(m.source.topics <> invalid) 
+		description = ""
+		for each topic in m.source.topics
+			if(len(description) > 0)
+				description = description + ", "
+			end if
+			description = description + topic
+		end for
+		content.Description = description
+	end if	
+	'
     content.ReleaseDate = m.GetReleaseDate()
 	content.ShortDescriptionLine1 = m.GetDescriptionLine1(content)
 	content.ShortDescriptionLine2 = m.GetDescriptionLine2(content)
+	content.Title = content.ShortDescriptionLine1 + " " + content.ReleaseDate
+	content.Rating = "NR"
 	m.GetImages(content)
     content.StreamFormat = "mp4"
 	m.GetDetails(content)

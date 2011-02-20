@@ -18,17 +18,10 @@ Function broadcastGetDetails(content As Object)
 	content.FetchDetails = broadcastContentFetchDetails	
 End Function
 
-' Invoked on content
-Function broadcastContentFetchDetails()
-	m.Streams = broadcastGetStreams(m.detailsUrl)
-	if(m.Streams <> invalid)
-		m.hasFetchedDetails = true
-	end if
-End Function
-
-
-Function broadcastGetStreams(url As String) As Object
+' Invoked on content, fetches streams, length
+Sub broadcastContentFetchDetails()
 	' get JSON
+	url = m.detailsUrl
     urlTransfer = CreateObject("roUrlTransfer")
     urlTransfer.SetUrl(url)
 	print "broadcastGetStreams() retrieving JSON from " + url
@@ -38,16 +31,21 @@ Function broadcastGetStreams(url As String) As Object
 	match = regex.Match(json)
 	if(match[1] = invalid) 
 		print "Failed to extract fullvideo JSON from " + url
-		return invalid	
-	end if
-	json = match[1] + "}"
-	fullvideo = parseJSON(json)
-	if(fullvideo = invalid)
-		print "Failed to parse JSON from " + url
-		return invalid
 	else
-		return getStreams(fullvideo)
+		json = match[1] + "}"
+		fullvideo = parseJSON(json)
+		if(fullvideo = invalid)
+			print "Failed to parse JSON from " + url
+		else
+			m.Streams = getStreams(fullvideo)
+			m.hasFetchedDetails = true
+		end if		
 	end if
-End Function
+	' set length
+	if(fullvideo.outMilli <> invalid)
+		length% = ((fullvideo.outMilli - fullvideo.inMilli) / 1000)
+		m.Length = length%
+	end if
+End Sub
 
 
