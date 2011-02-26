@@ -36,7 +36,10 @@ Function videoAsContent()
     content.ReleaseDate = m.GetReleaseDate()
 	content.ShortDescriptionLine1 = m.GetDescriptionLine1(content)
 	content.ShortDescriptionLine2 = m.GetDescriptionLine2(content)
-	content.Title = content.ShortDescriptionLine1 + " " + content.ReleaseDate
+	content.Title = content.ShortDescriptionLine1
+	if(content.ReleaseDate <> invalid)
+		content.Title = content.Title + " " + content.ReleaseDate
+	end if	
 	content.Rating = "NR"
 	m.GetImages(content)
     content.StreamFormat = "mp4"
