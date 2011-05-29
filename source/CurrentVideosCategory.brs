@@ -1,6 +1,7 @@
 Function newCurrentVideosCategory(name As String, url As String) As Object
     category = newCategory(name, url)
     category.MassageJSON = currentVideosMassageJSON
+    category.GetVideos = currentVideosGetVideos
     return category
 End Function
 
@@ -10,4 +11,13 @@ Function currentVideosMassageJSON(json As String) As String
     regex = CreateObject("roRegex", "^" + Chr(34) + "multimedia" + Chr(34) + "\:\ \[.*^" + Chr(34) +"broadcastArchive" + Chr(34) + "\:", "ms" )
     json = regex.replaceAll(json, CHR(34) + "broadcastArchive" + CHR(34) + ":") 
     return json
+End Function
+
+Function currentVideosGetVideos() As Object
+    if(m.HasUpdate())
+        m.videos = m.FetchVideos()
+        liveStream = newLiveStream()
+        m.videos.addHead(liveStream.AsContent())
+    end if
+    return m.videos
 End Function
