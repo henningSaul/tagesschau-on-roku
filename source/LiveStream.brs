@@ -15,15 +15,16 @@ Function streamAsContent()
     content.Title = m.title
     content.ShortDescriptionLine1 = m.title
     content.Rating = "NR"
-    content.StreamFormat = m.format
     content.SDPosterUrl = m.image
     content.HDPosterUrl = m.image
+    content.hasFetchedDetails = true
+    content.StreamFormat = m.format
     streams = CreateObject("roList")
     stream = CreateObject("roAssociativeArray")
     stream.url = m.url
     stream.bitrate = m.bitrate
     stream.quality = false
     streams.addTail(stream)
-    content.hasFetchedDetails = true
+    content.Streams = streams
     return content
 End Function
