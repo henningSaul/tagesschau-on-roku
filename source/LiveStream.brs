@@ -1,10 +1,10 @@
-Function newLiveStream() As Object
+Function newLiveStream(title As String, url As String, image As String ) As Object
     stream = CreateObject("roAssociativeArray")
-    stream.title = "EinsExtra Aktuell Live Stream"
-    stream.url = "http://ia-streaming.tagesschau.de/master.m3u8"
+    stream.title = title
+    stream.url = url
     stream.format = "hls"
     stream.bitrate = 0
-    stream.image = "http://miss.tagesschau.de/image/sendung/ard_portal_vorspann_eea.jpg"
+    stream.image = image
     stream.AsContent = streamAsContent
     return stream
 End Function
@@ -14,6 +14,7 @@ Function streamAsContent()
     content.ContentType = "episode"
     content.Title = m.title
     content.ShortDescriptionLine1 = m.title
+    content.ShortDescriptionLine2 = "Live Stream"
     content.Rating = "NR"
     content.SDPosterUrl = m.image
     content.HDPosterUrl = m.image

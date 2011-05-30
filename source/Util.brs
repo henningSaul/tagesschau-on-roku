@@ -30,3 +30,10 @@ Function parseJSON(json As String) As Object
     eval("jsonObject = " + json)
     return jsonObject
 End Function
+
+Function test() As Object
+    foo = {
+        bla: "bla"
+    }    
+
+End Function

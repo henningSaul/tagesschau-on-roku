@@ -9,6 +9,7 @@ Function newCategory(name As String, url As String) As Object
     category.FetchVideos = catFetchVideos
     category.MassageJSON = catMassageJSON
     category.GetVideosFromParsedJSON = catGetVideosFromParsedJSON
+    category.GetCacheInSeconds = catGetCacheInSeconds
     return category
 End Function
 
@@ -27,10 +28,14 @@ Function catHasUpdate() As Boolean
     end if
     now = CreateObject("roDateTime")
     ' cache for 5 minutes
-    if(now.asSeconds() > m.lastFetched.asSeconds() + (5 * 60))
+    if(now.asSeconds() > m.lastFetched.asSeconds() + m.GetCacheInSeconds())
         return true
     end if
     return false
+End Function
+
+Function catGetCacheInSeconds() As Integer
+    return 5 * 60
 End Function
 
 Function catMassageJSON(json As String) As String
