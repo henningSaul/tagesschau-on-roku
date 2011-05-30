@@ -37,18 +37,22 @@ Function currentFetchLiveStreams() As Object
     urlTransfer = CreateObject("roUrlTransfer")
     urlTransfer.SetUrl(m.url)
     json = urlTransfer.GetToString()
-    ' TODO: extract livestreams JSON
-    '
-    json = m.massageJSON(json)
+    regex = CreateObject("roRegex", "^" + Chr(34) + "livestreams" + Chr(34) + "\:(.*)" + "},\n{" + Chr(34) +"tsInHundredSeconds" + Chr(34) + "\:", "ms" )
+    matched = regex.Match(json)
+    if(matched = invalid)
+        return invalid
+    end if
+    json = matched[1]    
     parsedJSON = parseJSON(json)
     if(parsedJSON = invalid)
         print "Failed to parse LiveStreams JSON from " + m.url
         return invalid
     else
         liveStreams = CreateObject("roList")
-        ' TODO: parse 
-        liveStream = newLiveStream("Test", "http://ia-streaming.tagesschau.de/master.m3u8", "http://miss.tagesschau.de/image/sendung/ard_portal_vorspann_eea.jpg")
-        liveStreams.addHead(liveStream)
+        for each parsedStream in parsedJSON
+            liveStream = newLiveStream(parsedStream)
+            liveStreams.addHead(liveStream)            
+        end for
         return liveStreams
     end if
 End Function

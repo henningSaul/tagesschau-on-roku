@@ -31,9 +31,3 @@ Function parseJSON(json As String) As Object
     return jsonObject
 End Function
 
-Function test() As Object
-    foo = {
-        bla: "bla"
-    }    
-
-End Function

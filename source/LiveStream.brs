@@ -1,10 +1,13 @@
-Function newLiveStream(title As String, url As String, image As String ) As Object
+Function newLiveStream(source As Object) As Object
     stream = CreateObject("roAssociativeArray")
-    stream.title = title
-    stream.url = url
+    stream.title = source.title
+    stream.url = source.mediadata[0].m3u8_a_high
+    stream.startTime = source.start
+    stream.endTime = source.end
     stream.format = "hls"
     stream.bitrate = 0
-    stream.image = image
+    images = mergeAArrays(source.images[0].variants)
+    stream.image = images.mittel16x9
     stream.AsContent = streamAsContent
     return stream
 End Function
@@ -12,9 +15,11 @@ End Function
 Function streamAsContent() 
     content = CreateObject("roAssociativeArray")
     content.ContentType = "episode"
-    content.Title = m.title
-    content.ShortDescriptionLine1 = m.title
-    content.ShortDescriptionLine2 = "Live Stream"
+    content.Title = m.title + " Live Stream"
+    content.ShortDescriptionLine1 = content.Title
+    if(m.startTime <> invalid and m.endTime <> invalid)
+        content.ShortDescriptionLine2 = m.startTime + " - " + m.endTime + " Uhr" 
+    end if
     content.Rating = "NR"
     content.SDPosterUrl = m.image
     content.HDPosterUrl = m.image
