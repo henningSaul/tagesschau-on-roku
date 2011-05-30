@@ -6,7 +6,7 @@ Function newLiveStream(source As Object) As Object
     stream.endTime = source.end
     stream.format = "hls"
     stream.bitrate = 0    
-    stream.live = (source.live = "true")
+    stream.live = source.live
     images = mergeAArrays(source.images[0].variants)
     stream.image = images.mittel16x9
     stream.AsContent = streamAsContent
@@ -16,10 +16,10 @@ End Function
 Function streamAsContent() 
     content = CreateObject("roAssociativeArray")
     content.ContentType = "episode"
-    if(not m.live)
+    if(m.live = "false")
         content.Title = "Nächster Live Stream: " + m.title  
     else
-        content.Title = m.title + " Live Stream"      
+        content.Title = "Aktueller Live Stream: " + m.title      
     end if
     content.ShortDescriptionLine1 = content.Title
     if(m.startTime <> invalid and m.endTime <> invalid)
@@ -36,6 +36,6 @@ Function streamAsContent()
     stream.bitrate = m.bitrate
     stream.quality = false
     streams.addTail(stream)
-    'content.Streams = streams
+    content.Streams = streams
     return content
 End Function
