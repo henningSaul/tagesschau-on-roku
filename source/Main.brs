@@ -47,7 +47,7 @@ End Function
 Function getCategories() As Object
     categories = CreateObject("roList")
     ' Aktuelle Videos
-    category = newCurrentVideosCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100_type-video.json")
+    category = newCurrentVideosCategory("Aktuelle Videos", "http://www.tagesschau.de/api/multimedia/video/ondemand100~_type-video.json")
     categories.AddTail(category)
     ' Alle (aktuellen) Sendungen
     category = newBroadcastsCategory("Alle Sendungen", "http://www.tagesschau.de/api/multimedia/sendung/letztesendungen100.json")
@@ -56,7 +56,7 @@ Function getCategories() As Object
     category = newCategory("Dossier", "http://www.tagesschau.de/api/multimedia/video/ondemanddossier100.json")
     categories.AddTail(category)
     ' (Sendungs) Archiv
-    category = newBroadcastsCategory("Archiv", "http://www.tagesschau.de/api/multimedia/sendung/letztesendungen100_week-true.json")
+    category = newBroadcastsCategory("Archiv", "http://www.tagesschau.de/api/multimedia/sendung/letztesendungen100~_week-true.json")
     categories.AddTail(category)
     return categories   
 End Function
