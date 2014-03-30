@@ -1,4 +1,0 @@
-# copy to local.properties and adjust
-
-# IP address of your Roku, see Settings->player info
-ROKU_DEV_TARGET=10.0.1.3
