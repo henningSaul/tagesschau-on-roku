@@ -128,16 +128,23 @@ End Function
 Function getStreams(video As Object) as Object
     streams = CreateObject("roList")
     mediadata = mergeAArrays(video.mediadata)   
-    ' TODO: get bitrate info from tagesschau
-    stream = getStream(video, mediadata, "h264s", 100)
+    ' 480x272
+    stream = getStream(video, mediadata, "h264sm", 300)
     if(stream <> invalid)
         streams.AddTail(stream)
     end if
-    stream = getStream(video, mediadata, "h264m", 1000)
+    ' 640x360
+    stream = getStream(video, mediadata, "h264ml", 1000)
     if(stream <> invalid)
         streams.AddTail(stream)
     end if
-    stream = getStream(video, mediadata, "h264l", 2000)
+    ' 960x544
+    stream = getStream(video, mediadata, "h264l", 1500)
+    if(stream <> invalid)
+        streams.AddTail(stream)
+    end if
+    ' 1280x720
+    stream = getStream(video, mediadata, "h264xl", 3000)
     if(stream <> invalid)
         streams.AddTail(stream)
     end if
