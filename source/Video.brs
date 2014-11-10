@@ -144,7 +144,7 @@ Function getStreams(video As Object) as Object
         streams.AddTail(stream)
     end if
     ' 1280x720
-    stream = getStream(video, mediadata, "h264xl", 3000)
+    stream = getStream(video, mediadata, "h264xl", 3000, true)
     if(stream <> invalid)
         streams.AddTail(stream)
     end if
@@ -152,14 +152,14 @@ Function getStreams(video As Object) as Object
 End Function
 
 ' "static" helper method    
-Function getStream(video As Object, mediadata As Object, format as String, bitrate As Integer) As Object
+Function getStream(video As Object, mediadata As Object, format as String, bitrate As Integer, hd=false As Boolean) As Object
     stream = CreateObject("roAssociativeArray")
     stream.url = mediadata.Lookup(format)
     if(stream.url = invalid)
         return invalid
     end if
     stream.bitrate = bitrate
-    stream.quality = false
+    stream.quality = hd
     stream.contentid = video.sophoraId + "-" + format
     return stream
 End Function
