@@ -36,6 +36,7 @@ Function showPosterScreen() As Integer
                 end if
             else if msg.isListItemSelected() then                               
                 displayVideo(screen.GetContentList(), msg.GetIndex())
+                screen.SetFocusToFilterBanner(false)
             else if msg.isScreenClosed() then
                 return -1
             end if
