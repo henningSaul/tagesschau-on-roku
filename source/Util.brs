@@ -9,6 +9,7 @@ Function mergeAArrays(enum As Object) As Object
     return result
 End Function
 
+' TODO: use ParseJson from SDK
 Function parseJSON(json As String) As Object
     null = invalid
     jsonObject = invalid
