@@ -1,12 +1,8 @@
-tagesschau Roku Channel 
-=======================
+## 1.6 (unreleased)
 
-https://www.roku.com/channels#!details/3517/tagesschau
+Features:
+  - Added support for HD streams
 
-TODO
-- [] Use BrighScript ParseJSON
-- [] Subtitles
-- [] Update Artwork/Images
-- [] Update Screenshots
-- [] Update Impressum
+Bugfixes:
+  - Video stays focused after being played 
 
