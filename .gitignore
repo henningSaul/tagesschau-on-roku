@@ -2,3 +2,5 @@ out/
 target/
 .project
 .buildpath
+.settings
+

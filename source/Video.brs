@@ -55,12 +55,12 @@ Function videoGetImages(content as Object)
         content.HDPosterUrl = "pkg:/images/Logo_Main.png"
     else
         images = mergeAArrays(video.images[0].variants)
-        ' mittel16x9 seems to be the best fit
-        if(images.mittel16x9 <> invalid)
-            content.SDPosterUrl = images.mittel16x9
-            content.HDPosterUrl = images.mittel16x9
+        ' use gross16x9
+        if(images.gross16x9 <> invalid)
+            content.SDPosterUrl = images.gross16x9
+            content.HDPosterUrl = images.gross16x9
         else
-            ' fallback for Aktuell/Wetter
+        ' fallback for Aktuell/Wetter
             content.SDPosterUrl = images.grossgalerie16x9
             content.HDPosterUrl = images.grossgalerie16x9
         end if
