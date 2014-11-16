@@ -142,9 +142,7 @@ Function playVideo(content As Object)
     video = CreateObject("roVideoScreen")
     video.setMessagePort(p)
     video.SetContent(content)
-    video.ShowSubtitle(true)
     video.show()
-    print content
     while true
         msg = wait(0, video.GetMessagePort())
         if type(msg) = "roVideoScreenEvent"

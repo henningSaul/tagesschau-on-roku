@@ -26,7 +26,6 @@ Sub broadcastContentFetchDetails()
     urlTransfer.SetUrl(url)
     print "broadcastGetStreams() retrieving JSON from " + url
     json = urlTransfer.GetToString()
-    ' TODO: use ParseJson from SDK
     ' parsing everything crashes Roku, try to extract "fullvideo" JSON, again this is somewhat fragile
     regex = CreateObject("roRegex", "^" + Chr(34) + "fullvideo" + Chr(34) + "\:\ \[(.*?),\n^" + Chr(34) +"endOfContent" + Chr(34) + "\: null", "ms" )
     match = regex.Match(json)
@@ -47,27 +46,6 @@ Sub broadcastContentFetchDetails()
         length% = ((fullvideo.outMilli - fullvideo.inMilli) / 1000)
         m.Length = length%
     end if
-    ' set subtitle
-    'm.SubtitleConfig = {
-        'ShowSubtitle: 1
-        'TrackName: "http://www.tagesschau.de/multimedia/video/" + fullvideo.sophoraId + "~subtitle.html"
-        'TrackName: "https://vimeosrtplayer.googlecode.com/svn-history/r5/VimeoSrtPlayer/bin/srt/example.srt"
-    '}
-    'm.ShowSubtitle = 1
-    SubtitleTracks = [{
-        Language: "ger"
-        Description: "German"
-        'TrackName: "http://www.tagesschau.de/multimedia/video/" + fullvideo.sophoraId + "~subtitle.html"
-        TrackName: "https://vimeosrtplayer.googlecode.com/svn-history/r5/VimeoSrtPlayer/bin/srt/example.srt"
-    }]
-    m.SubtitleTracks=SubtitleTracks
-    'm.Streams[0].SubtitleTracks=SubtitleTracks
-    'm.Streams[1].SubtitleTracks=SubtitleTracks    
-    'm.Streams[2].SubtitleTracks=SubtitleTracks
-    'm.Streams[3].SubtitleTracks=SubtitleTracks
-    
-    print m
-    print m.SubtitleConfig
 End Sub
 
 
