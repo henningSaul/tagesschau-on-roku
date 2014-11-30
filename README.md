@@ -1,7 +1,7 @@
 tagesschau Roku Channel 
 =======================
 
-The [tagesschau Roku channel](https://www.roku.com/channels#!details/3517/tagesschau) allows to stream current videos, complete broadcasts and background information from Germany's trusted public broadcaster ARD using [Roku](http://www.roku.com) streaming players.
+The [tagesschau Roku channel](https://www.roku.com/channels#!details/3517/tagesschau) allows streaming current videos, complete broadcasts and background information from Germany's trusted public broadcaster ARD using [Roku](http://www.roku.com) streaming players.
 
 ![tagesschau Roku channel](https://raw.githubusercontent.com/henningSaul/tagesschau-on-roku/master/channelstore-artwork/screenshots/AktuelleVideos.jpg)
 
@@ -14,4 +14,7 @@ There's always something left TODO
 - [ ] Update Artwork/Images
 - [ ] Update Screenshots
 - [ ] Update Impressum
+- [ ] Add Analytics
+  - [Google Analytics](http://bloggingwordpress.com/2012/04/google-analytics-for-roku-developers/)
+  - or [Quantcast](https://github.com/quantcast/roku-measurement)
 
