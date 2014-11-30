@@ -26,21 +26,14 @@ Sub broadcastContentFetchDetails()
     urlTransfer.SetUrl(url)
     print "broadcastGetStreams() retrieving JSON from " + url
     json = urlTransfer.GetToString()
-    ' parsing everything crashes Roku, try to extract "fullvideo" JSON, again this is somewhat fragile
-    regex = CreateObject("roRegex", "^" + Chr(34) + "fullvideo" + Chr(34) + "\:\ \[(.*?),\n^" + Chr(34) +"endOfContent" + Chr(34) + "\: null", "ms" )
-    match = regex.Match(json)
-    if(match[1] = invalid) 
-        print "Failed to extract fullvideo JSON from " + url
+    parsedJSON = ParseJson(json)
+    fullvideo = parsedJSON.fullvideo
+    if(fullvideo = invalid)
+        print "Failed to parse JSON from " + url
     else
-        json = match[1] + "}"
-        fullvideo = parseJSON(json)
-        if(fullvideo = invalid)
-            print "Failed to parse JSON from " + url
-        else
-            m.Streams = getStreams(fullvideo)
-            m.hasFetchedDetails = true
-        end if      
-    end if
+        m.Streams = getStreams(fullvideo)
+        m.hasFetchedDetails = true
+    end if      
     ' set length
     if(fullvideo.outMilli <> invalid)
         length% = ((fullvideo.outMilli - fullvideo.inMilli) / 1000)

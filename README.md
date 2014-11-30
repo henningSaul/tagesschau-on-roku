@@ -9,12 +9,13 @@ This git repository hosts the complete [BrightScript](http://sdkdocs.roku.com/di
 
 There's always something left TODO
 -----------------------------
-- [ ] Use BrighScript ParseJSON
+- [X] Use BrighScript ParseJSON
 - [ ] Get Subtitles to work
 - [ ] Update Artwork/Images
 - [ ] Update Screenshots
 - [ ] Update Impressum
 - [ ] Add Analytics
   - [Google Analytics](http://bloggingwordpress.com/2012/04/google-analytics-for-roku-developers/)
+  - or [Google Analytics](https://github.com/thyngster/roku-universal-analytics)
   - or [Quantcast](https://github.com/quantcast/roku-measurement)
 

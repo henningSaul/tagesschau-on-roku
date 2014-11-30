@@ -7,7 +7,6 @@ Function newCategory(name As String, url As String) As Object
     category.GetVideos = catGetVideos
     category.HasUpdate = catHasUpdate
     category.FetchVideos = catFetchVideos
-    category.MassageJSON = catMassageJSON
     category.GetVideosFromParsedJSON = catGetVideosFromParsedJSON
     category.GetCacheInSeconds = catGetCacheInSeconds
     return category
@@ -27,7 +26,7 @@ Function catHasUpdate() As Boolean
         return true
     end if
     now = CreateObject("roDateTime")
-    ' cache for 5 minutes
+    ' cache for some time
     if(now.asSeconds() > m.lastFetched.asSeconds() + m.GetCacheInSeconds())
         return true
     end if
@@ -38,19 +37,13 @@ Function catGetCacheInSeconds() As Integer
     return 5 * 60
 End Function
 
-Function catMassageJSON(json As String) As String
-    ' no massaging necessary
-    return json
-End Function
-
 Function catFetchVideos() As Object
     ' get JSON
     urlTransfer = CreateObject("roUrlTransfer")
     urlTransfer.SetUrl(m.url)
     print "getVideos() retrieving JSON for category " + m.name + " from " + m.url
     json = urlTransfer.GetToString()
-    json = m.massageJSON(json)
-    parsedJSON = parseJSON(json)
+    parsedJSON = ParseJson(json)
     if(parsedJSON = invalid)
         print "Failed to parse JSON from " + m.url
         return invalid
