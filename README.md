@@ -13,9 +13,5 @@ There's always something left TODO
 - [ ] Get Subtitles to work
 - [ ] Update Artwork/Images
 - [ ] Update Screenshots
-- [ ] Update Impressum
-- [ ] Add Analytics
-  - [Google Analytics](http://bloggingwordpress.com/2012/04/google-analytics-for-roku-developers/)
-  - or [Google Analytics](https://github.com/thyngster/roku-universal-analytics)
-  - or [Quantcast](https://github.com/quantcast/roku-measurement)
+- [X] Update Impressum
 
