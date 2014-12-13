@@ -8,7 +8,7 @@ Enhancements:
 
 Bugfixes:
 
-## 1.6 (unreleased)
+## 1.6 (12/10/2014)
 
 Features:
   - Added support for HD streams
