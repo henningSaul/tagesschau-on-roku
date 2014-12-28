@@ -16,7 +16,6 @@ Function currentGetVideosFromParsedJSON(parsedJSON As Object) As Object
         if(multimedia.livestreams <> invalid)
             for each livestream in multimedia.livestreams
                 l = newLiveStream(livestream)
-                print l
                 content = l.asContent()
                 result.addTail(content)
             end for
