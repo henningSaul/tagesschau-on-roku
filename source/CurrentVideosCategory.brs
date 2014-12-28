@@ -13,11 +13,14 @@ Function currentGetVideosFromParsedJSON(parsedJSON As Object) As Object
     result = CreateObject("roList")
     ' add livestream(s)
     for each multimedia in parsedJSON.multimedia
-        for each livestream in multimedia.livestreams
-            l = newLiveStream(livestream)
-            content = l.asContent()
-            result.addTail(content)
-        end for      
+        if(multimedia.livestreams <> invalid)
+            for each livestream in multimedia.livestreams
+                l = newLiveStream(livestream)
+                print l
+                content = l.asContent()
+                result.addTail(content)
+            end for
+        end if      
     end for
     ' add current videos
     for each video in parsedJSON.videos
