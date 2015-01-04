@@ -27,7 +27,7 @@ Sub broadcastContentFetchDetails()
     print "broadcastGetStreams() retrieving JSON from " + url
     json = urlTransfer.GetToString()
     parsedJSON = ParseJson(json)
-    fullvideo = parsedJSON.fullvideo
+    fullvideo = parsedJSON.fullvideo[0]
     if(fullvideo = invalid)
         print "Failed to parse JSON from " + url
     else
@@ -39,6 +39,14 @@ Sub broadcastContentFetchDetails()
         length% = ((fullvideo.outMilli - fullvideo.inMilli) / 1000)
         m.Length = length%
     end if
+    ' set subtitle URL
+    ' e.g. http://www.tagesschau.de/multimedia/video/video-50605~subtitle.html
+    m.SubtitleTracks = [{
+        Language: "ger",
+        Description: "German",
+        ' TrackName: "http://vimeosrtplayer.googlecode.com/svn-history/r5/VimeoSrtPlayer/bin/srt/example.srt"
+        TrackName: "http://www.tagesschau.de/multimedia/video/" + fullvideo.sophoraId + "~subtitle.html"
+    }]
 End Sub
 
 
