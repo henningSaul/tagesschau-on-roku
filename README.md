@@ -10,7 +10,7 @@ This git repository hosts the complete [BrightScript](http://sdkdocs.roku.com/di
 There's always something left TODO
 -----------------------------
 - [X] Use BrighScript ParseJSON
-- [X] Get Subtitles to work
-- [ ] Update Screenshots
+- [ ] Get Subtitles to work
+- [X] Update Screenshots
 - [X] Update Impressum
 

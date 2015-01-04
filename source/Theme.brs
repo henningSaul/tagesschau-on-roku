@@ -34,7 +34,7 @@ Function getTheme() As Object
     theme.OverhangLogoSD  = "pkg:/images/Logo_Overhang_SD.png"
     ' HD Overhang
     theme.OverhangOffsetHD_X = "0"
-    theme.OverhangOffsetHD_Y = "11"
+    theme.OverhangOffsetHD_Y = "0"
     theme.OverhangLogoHD  = "pkg:/images/Logo_Overhang_HD.png"
     return theme
 End Function
