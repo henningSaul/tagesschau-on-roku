@@ -41,12 +41,20 @@ Sub broadcastContentFetchDetails()
     end if
     ' set subtitle URL
     ' e.g. http://www.tagesschau.de/multimedia/video/video-50605~subtitle.html
-    m.SubtitleTracks = [{
-        Language: "ger",
-        Description: "German",
-        ' TrackName: "http://vimeosrtplayer.googlecode.com/svn-history/r5/VimeoSrtPlayer/bin/srt/example.srt"
-        TrackName: "http://www.tagesschau.de/multimedia/video/" + fullvideo.sophoraId + "~subtitle.html"
-    }]
+    subtitleUrl = "http://www.tagesschau.de/multimedia/video/" + fullvideo.sophoraId + "~subtitle.html"
+    ' check if subtitles available
+    urlTransfer = CreateObject("roUrlTransfer")
+    urlTransfer.SetUrl(subtitleUrl)
+    subtitleText = urlTransfer.GetToString()
+    if((subtitleText <> invalid) and (Len(subtitleText) > 0))
+        print "broadcastGetStreams() setting subtitles url to " + subtitleUrl
+        m.SubtitleTracks = [{
+            Language: "ger",
+            Description: "German",
+            ' TrackName: "http://vimeosrtplayer.googlecode.com/svn-history/r5/VimeoSrtPlayer/bin/srt/example.srt"
+            TrackName: subtitleUrl
+        }]
+    endif    
 End Sub
 
 

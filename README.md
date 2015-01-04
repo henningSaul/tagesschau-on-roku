@@ -7,10 +7,4 @@ The [tagesschau Roku channel](https://www.roku.com/channels#!details/3517/tagess
 
 This git repository hosts the complete [BrightScript](http://sdkdocs.roku.com/display/sdkdoc/BrightScript+Language+Reference) source code and artwork of the tagesschau Roku channel. Please note that it is *not* an official channel by ARD but developed and maintained by [me](https://github.com/henningSaul) as a side project in my spare time. I hope you enjoy it. --Henning
 
-There's always something left TODO
------------------------------
-- [X] Use BrighScript ParseJSON
-- [ ] Get Subtitles to work
-- [X] Update Screenshots
-- [X] Update Impressum
 
