@@ -1,7 +1,11 @@
-tagesschau Roku Channel 
-=======================
+**INACTIVE** - tagesschau Roku Channel 
+==================================
 
-The [tagesschau Roku channel](https://www.roku.com/channels#!details/3517/tagesschau) allows streaming current videos, complete broadcasts and background information from Germany's trusted public broadcaster ARD using [Roku](http://www.roku.com) streaming players.
+*Please note*: This project is **inactive** since tagesschau has released their official Roku Channel.
+Also, my code is very likely oudated/obsolete and I have not tested it for a number of years.
+
+*Old Project Description*
+The tagesschau Roku channel allows streaming current videos, complete broadcasts and background information from Germany's trusted public broadcaster ARD using [Roku](http://www.roku.com) streaming players.
 
 ![tagesschau Roku channel](https://raw.githubusercontent.com/henningSaul/tagesschau-on-roku/master/channelstore-artwork/screenshots/AktuelleVideos.jpg)
 
